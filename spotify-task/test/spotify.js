@@ -49,12 +49,12 @@ describe('authorise', () => {
 describe('getArtistAlbums', () => {
 
   beforeEach(() => {
-    sinon.stub(request, 'get').yields(null, null, {
+    sinon.stub(request, 'get').yields(null, null, JSON.stringify({
       items: [
         { name: 'Ride The Lightning' },
         { name: 'Master Of Puppets' }
       ]
-    })
+    }))
   })
 
   afterEach(() => {
@@ -70,5 +70,25 @@ describe('getArtistAlbums', () => {
       done()
     })
   });
+
+  it('are filtered by name', done => {
+    request.get.yields(null, null, JSON.stringify({
+      items: [
+        { name: 'Ride The Lightning' },
+        { name: 'Ride The Lightning' },
+        { name: 'Master Of Puppets' },
+        { name: 'Master Of Puppets' },
+        { name: 'Master Of Puppets' }
+      ]
+    }))
+    spotify.getArtistAlbums('artist id', 'the token', (err, albums) => {
+      albums.items.should.eql([
+        { name: 'Ride The Lightning' },
+        { name: 'Master Of Puppets' }
+      ])
+      done()
+    })
+
+  })
 
 });

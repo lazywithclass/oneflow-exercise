@@ -1,4 +1,5 @@
-var request = require('request')
+const request = require('request'),
+      _ = require('lodash')
 
 const authorise = done => {
   const authorization = 'Basic ' +
@@ -20,7 +21,16 @@ const getArtistAlbums = (id, token, done) => {
     url: `https://api.spotify.com/v1/artists/${id}/albums`,
     headers: { Authorization: `Bearer ${token}` }
   }
-  request.get(opts, (err, res, body) => done(err, body && body))
+  request.get(opts, (err, res, body) => {
+    if (err) return done(err)
+
+    body = JSON.parse(body)
+    body.items = _.uniqBy(body.items, album => {
+      return album.name
+    })
+
+    done(null, body)
+  })
 }
 
 module.exports = {

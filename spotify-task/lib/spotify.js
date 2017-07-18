@@ -12,8 +12,7 @@ const authorise = done => {
     json: true
   }
 
-  request.post(opts, (err, res, body) =>
-    done(err, body && body.access_token))
+  request.post(opts, (err, res, body) => done(err, body && body.access_token))
 }
 
 const getArtistAlbums = (id, token, done) => {
@@ -32,6 +31,26 @@ const getArtistAlbums = (id, token, done) => {
     done(null, body)
   })
 }
+
+const searchArtists = (search, token, done) => {
+  const opts = {
+    url: `https://api.spotify.com/v1/search?type=artist&q=${search}`,
+    headers: { Authorization: `Bearer ${token}` }
+  }
+  request.get(opts, (err, res, body) => {
+    if (err) return done(err)
+
+    body = JSON.parse(body)
+    done(null, body)
+  })
+}
+
+authorise((err, token) => {
+  searchArtists('prodigy', token, (err, result) => {
+    console.log(result.artists.items);
+  })
+})
+
 
 module.exports = {
   authorise: authorise,

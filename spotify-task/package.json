@@ -1,0 +1,22 @@
+{
+  "name": "spotify-task",
+  "version": "1.0.0",
+  "description": "A small Spotify project to browse an artist's albums",
+  "main": "server.js",
+  "scripts": {
+    "dev": "mocha --require should --watch",
+    "test": "mocha --require should",
+    "start": "node server.js"
+  },
+  "author": "me@lazywithclass.com",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.3",
+    "request": "^2.81.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.4.2",
+    "should": "^11.2.1",
+    "sinon": "^2.3.8"
+  }
+}
